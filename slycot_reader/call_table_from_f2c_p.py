@@ -111,8 +111,10 @@ class F2cpReader(object):
                 self.big_table[caller]['calls'] = calls_set.union(callee_set)
 
             for callee in callee_set:
-                called_set = self.big_table[callee].get('called in', caller_set)
-                self.big_table[callee]['called in'] = called_set.union(caller_set)
+                called_set = self.big_table[callee].get(
+                    'called in', caller_set)
+                self.big_table[callee]['called in'] = called_set.union(
+                    caller_set)
 
     def get_lib_name_from_p_file_path(self, f2c_p_file_path):
         """
@@ -153,7 +155,8 @@ class F2cpReader(object):
             for type_id, arg_type_name in zip(big_table_entry['arg types'], big_table_entry['arg list']):
                 arg_type_lookup_entry = self.arg_type_lookup.get(type_id, {})
                 # count number of each case
-                arg_type_lookup_entry[arg_type_name[0]] = arg_type_lookup_entry.get(arg_type_name[0], 0) + 1
+                arg_type_lookup_entry[arg_type_name[0]] = arg_type_lookup_entry.get(
+                    arg_type_name[0], 0) + 1
                 self.arg_type_lookup[type_id] = arg_type_lookup_entry
             # end update arg_type_lookup
 
@@ -187,7 +190,8 @@ class F2cpReader(object):
         arg_type_name_list = []
         for arg_type_name_str in arg_list:
             split = self.re_arg_type_name_split.search(arg_type_name_str)
-            arg_type_name_list.append((split.group('type'), split.group('name')))
+            arg_type_name_list.append(
+                (split.group('type'), split.group('name')))
 
         result = {
             'name': match.group('name'),
@@ -281,11 +285,13 @@ class Dict2MDTable(object):
         elif isinstance(row_selection_list, (list, tuple, set)):
             self.row_selection_list = row_selection_list
         else:
-            raise ValueError('expect row_selection_list to be one of list, tuple, and set')
+            raise ValueError(
+                'expect row_selection_list to be one of list, tuple, and set')
 
         # column selection
         if column_order_list is None:
-            one_sample = self.input_dict[SetMdQuote(self.input_dict.keys()).pop()]
+            one_sample = self.input_dict[SetMdQuote(
+                self.input_dict.keys()).pop()]
             self.column_order_list = {'name': key for key in one_sample}
         elif isinstance(column_order_list, (list, tuple)):
             self.column_order_list = column_order_list
@@ -321,12 +327,13 @@ class Dict2MDTable(object):
     def get_third_and_latter_row_text(self, function_name):
         """
         Prepare third row text on the given function
-        
+
         :param function_name: 
         :return: 
         """
         function_info_dict = self.input_dict[function_name]
-        column_list = self.get_column_list_third_and_latter_row(function_info_dict, function_name)
+        column_list = self.get_column_list_third_and_latter_row(
+            function_info_dict, function_name)
         row_text = ' '.join(column_list)
         return row_text
 
@@ -443,7 +450,8 @@ def main():
     print('never used %d\n' % len(never_called))
     never_called_table_converter = Dict2MDTable(
         never_called,
-        [{'name': 'lib'}, {'name': '# arg'}, {'name': 'return type'}, {'name': 'path'}, ]
+        [{'name': 'lib'}, {'name': '# arg'}, {
+            'name': 'return type'}, {'name': 'path'}, ]
     )
     print(never_called_table_converter)
 
@@ -451,11 +459,13 @@ def main():
     print('not defined %d\n' % len(definition_missing))
     not_defined_table_converter = Dict2MDTable(
         definition_missing,
-        [{'name': 'lib'}, {'name': '# arg'}, {'name': 'return type'}, {'name': 'path'}, {'name': 'called in'}]
+        [{'name': 'lib'}, {'name': '# arg'}, {'name': 'return type'},
+            {'name': 'path'}, {'name': 'called in'}]
     )
     print(not_defined_table_converter)
 
-    checker = RecursivelyCheckNotDefined(reader.big_table, definition_missing, function_selection_list)
+    checker = RecursivelyCheckNotDefined(
+        reader.big_table, definition_missing, function_selection_list)
     checker.check_list()
     print('not defined :')
     print(checker.not_defined_set)
@@ -464,7 +474,8 @@ def main():
     print('\n' + ('related : %d' % len(checker.checked_set)) + '\n')
     related_table = Dict2MDTableSorted(
         reader.big_table,
-        [{'name': 'lib'}, {'name': '# arg'}, {'name': 'return type'}, {'name': 'calls'}],
+        [{'name': 'lib'}, {'name': '# arg'}, {
+            'name': 'return type'}, {'name': 'calls'}],
         checker.checked_set
     )
     print(related_table)

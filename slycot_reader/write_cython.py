@@ -50,7 +50,8 @@ class Dict2Cython(Dict2MDTable):
     }
 
     def __init__(self, input_dict, row_selection_list):
-        super(Dict2Cython, self).__init__(input_dict, row_selection_list=row_selection_list)
+        super(Dict2Cython, self).__init__(
+            input_dict, row_selection_list=row_selection_list)
 
     @staticmethod
     def write_pyx_header():
@@ -74,9 +75,11 @@ np.import_array()
         return '''def {python_function_name:s} ({python_argument_list}):
     {c_function_name:s} ({c_function_argument_list})'''.format(
             c_function_name=c_function_name,
-            c_function_argument_list=self.get_c_func_arg_list_txt(c_function_name),
+            c_function_argument_list=self.get_c_func_arg_list_txt(
+                c_function_name),
             python_function_name=self.get_py_func_name(c_function_name),
-            python_argument_list=self.get_py_func_arg_list_txt(c_function_name),
+            python_argument_list=self.get_py_func_arg_list_txt(
+                c_function_name),
         )
 
     @staticmethod
@@ -109,7 +112,8 @@ np.import_array()
             function_info_dict['return type'],
             function_info_dict['name'],
             '(',
-            ', '.join([' '.join(arg_type_name) for arg_type_name in function_info_dict['arg list']]),
+            ', '.join([' '.join(arg_type_name)
+                       for arg_type_name in function_info_dict['arg list']]),
             ')'
         ]
         return column_list
