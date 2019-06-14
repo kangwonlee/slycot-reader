@@ -1,33 +1,8 @@
+import configparser
 import os
 import pprint
 import re
-
-default_path_dict = {
-    'slycot': {
-        'src': os.path.join(os.pardir, 'slycot', 'src'),
-        'f2c': os.path.join(os.pardir, 'slycot', 'src-f2c'),
-    },
-    'lapack': {
-        'src': os.path.join(os.pardir, 'slycot', 'src-f2c', 'lapack', 'SRC'),
-        'f2c': os.path.join(os.pardir, 'slycot', 'src-f2c', 'lapack', 'src-f2c'),
-        'install-f2c': os.path.join(os.pardir, 'slycot', 'src-f2c', 'lapack', 'install-f2c'),
-    },
-    'blas': {
-        'src': os.path.join(os.pardir, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'SRC'),
-        'f2c': os.path.join(os.pardir, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'src-f2c'),
-    },
-}
-
-f2c_path_dict = {
-    'src': {},
-    'f2c': {},
-}
-
-for lib, path_dict in default_path_dict.items():
-    f2c_path_dict['src'][lib] = path_dict['src']
-    f2c_path_dict['f2c'][lib] = path_dict['f2c']
-
-f2c_path_dict['f2c']['lapack-install'] = default_path_dict['lapack']['install-f2c']
+import sys
 
 
 class F2cpReader(object):
@@ -383,7 +358,7 @@ class Dict2MDTableSorted(Dict2MDTable):
             [self.get_third_and_latter_row_text(function_name) for function_name in list_to_sort])
 
 
-def scan_f2c():
+def scan_f2c(f2c_path_dict):
     reader = F2cpReader()
     for lib, lib_path in f2c_path_dict['f2c'].items():
         reader.lib_name = lib
@@ -421,14 +396,45 @@ class RecursivelyCheckNotDefined(object):
         self.checked_set.add(function_name)
 
 
-def main():
+def main(argv):
+
+    slycot_path = get_slycot_path(argv)
+
+    default_path_dict = {
+        'slycot': {
+            'src': os.path.join(slycot_path, 'slycot', 'src'),
+            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c'),
+        },
+        'lapack': {
+            'src': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'SRC'),
+            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'src-f2c'),
+            'install-f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'install-f2c'),
+        },
+        'blas': {
+            'src': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'SRC'),
+            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'src-f2c'),
+        },
+    }
+
+    f2c_path_dict = {
+        'src': {},
+        'f2c': {},
+    }
+
+    for lib, path_dict in default_path_dict.items():
+        f2c_path_dict['src'][lib] = path_dict['src']
+        f2c_path_dict['f2c'][lib] = path_dict['f2c']
+
+    f2c_path_dict['f2c']['lapack-install'] = default_path_dict['lapack']['install-f2c']
+
+
     function_selection_list = ['sb02md_', 'sb02mt_', 'sb03md_', 'tb04ad_', 'td04ad_',
                                'sg02ad_', 'sg03ad_', 'tb01pd_', 'ab09ad_', 'ab09md_',
                                'ab09nd_', 'sb01bd_', 'sb02od_', 'sb03od_', 'sb04md_',
                                'sb04qd_', 'sb10ad_', 'sb10hd_', ]
 
     # scan through f2c folders
-    reader = scan_f2c()
+    reader = scan_f2c(f2c_path_dict)
     # argument_type_id vs argument_type lookup table
     pprint.pprint(reader.arg_type_lookup)
     # size of the big table
@@ -523,4 +529,4 @@ class SetMdQuote(set):
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
