@@ -481,6 +481,21 @@ def main():
     print(related_table)
 
 
+def get_slycot_path(argv):
+    if argv:
+        slycot_path = argv[0]
+    else:
+        config_filename = os.path.join(os.path.dirname(__file__), 'call_table.cfg')
+
+        config = configparser.ConfigParser()
+        config.read(config_filename)
+        slycot_path = os.path.expanduser(config['Slycot']['path'])
+
+    assert os.path.exists(slycot_path), slycot_path
+
+    return slycot_path
+
+
 def unique_list_ordered(function_selection_list):
     """
     Generate a list of unique elements preserving the first appearance order
