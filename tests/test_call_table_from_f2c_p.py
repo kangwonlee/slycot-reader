@@ -36,3 +36,10 @@ def test_SetMdQuote():
     assert s_str.startswith('{'), s_str
     assert s_str.endswith('}'), s_str
     assert s_str.count('`') == 2 * len(s)
+
+    t = mut.SetMdQuote(('d', 'b', 'c'))
+    s_union_t = s.union(t)
+
+    expected_union = mut.SetMdQuote(list('abcd'))
+
+    assert expected_union == s_union_t, s_union_t
