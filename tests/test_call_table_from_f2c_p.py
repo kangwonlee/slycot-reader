@@ -17,3 +17,13 @@ def test_get_slycot_path():
     result = mut.get_slycot_path(input_list)
 
     assert expected == result
+
+
+def test_unique_list_ordered():
+    input_list = list('abcdabcd')
+
+    result = mut.unique_list_ordered(input_list)
+
+    expected = list('abcd')
+
+    assert expected == result, result
