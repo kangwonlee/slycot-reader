@@ -56,3 +56,12 @@ def test_get_f2c_path_dict():
     result_f2c = result['f2c']
 
     assert isinstance(result_f2c, dict)
+
+
+@pytest.fixture
+def f2cp_reader():
+    reader = mut.F2cpReader()
+
+    yield reader
+
+    del reader
