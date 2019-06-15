@@ -43,3 +43,16 @@ def test_SetMdQuote():
     expected_union = mut.SetMdQuote(list('abcd'))
 
     assert expected_union == s_union_t, s_union_t
+
+
+def test_get_f2c_path_dict():
+    input_path = 'abc'
+    result = mut.get_f2c_path_dict(input_path)
+
+    assert isinstance(result, dict)
+    assert 'f2c' in result, result
+    assert 'src' in result, result
+
+    result_f2c = result['f2c']
+
+    assert isinstance(result_f2c, dict)
