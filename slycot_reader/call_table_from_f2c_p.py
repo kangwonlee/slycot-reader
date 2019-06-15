@@ -400,33 +400,7 @@ def main(argv):
 
     slycot_path = get_slycot_path(argv)
 
-    default_path_dict = {
-        'slycot': {
-            'src': os.path.join(slycot_path, 'slycot', 'src'),
-            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c'),
-        },
-        'lapack': {
-            'src': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'SRC'),
-            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'src-f2c'),
-            'install-f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'install-f2c'),
-        },
-        'blas': {
-            'src': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'SRC'),
-            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'src-f2c'),
-        },
-    }
-
-    f2c_path_dict = {
-        'src': {},
-        'f2c': {},
-    }
-
-    for lib, path_dict in default_path_dict.items():
-        f2c_path_dict['src'][lib] = path_dict['src']
-        f2c_path_dict['f2c'][lib] = path_dict['f2c']
-
-    f2c_path_dict['f2c']['lapack-install'] = default_path_dict['lapack']['install-f2c']
-
+    f2c_path_dict = get_f2c_path_dict(slycot_path)
 
     function_selection_list = ['sb02md_', 'sb02mt_', 'sb03md_', 'tb04ad_', 'td04ad_',
                                'sg02ad_', 'sg03ad_', 'tb01pd_', 'ab09ad_', 'ab09md_',
@@ -485,6 +459,36 @@ def main(argv):
         checker.checked_set
     )
     print(related_table)
+
+
+def get_f2c_path_dict(slycot_path):
+    default_path_dict = {
+        'slycot': {
+            'src': os.path.join(slycot_path, 'slycot', 'src'),
+            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c'),
+        },
+        'lapack': {
+            'src': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'SRC'),
+            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'src-f2c'),
+            'install-f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'install-f2c'),
+        },
+        'blas': {
+            'src': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'SRC'),
+            'f2c': os.path.join(slycot_path, 'slycot', 'src-f2c', 'lapack', 'BLAS', 'src-f2c'),
+        },
+    }
+
+    f2c_path_dict = {
+        'src': {},
+        'f2c': {},
+    }
+
+    for lib, path_dict in default_path_dict.items():
+        f2c_path_dict['src'][lib] = path_dict['src']
+        f2c_path_dict['f2c'][lib] = path_dict['f2c']
+
+    f2c_path_dict['f2c']['lapack-install'] = default_path_dict['lapack']['install-f2c']
+    return f2c_path_dict
 
 
 def get_slycot_path(argv):
