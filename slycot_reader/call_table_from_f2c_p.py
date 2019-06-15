@@ -495,7 +495,8 @@ def get_slycot_path(argv):
     if argv:
         slycot_path = argv[0]
     else:
-        config_filename = os.path.join(os.path.dirname(__file__), 'call_table.cfg')
+        config_filename = os.path.join(
+            os.path.dirname(__file__), 'call_table.cfg')
 
         config = configparser.ConfigParser()
         config.read(config_filename)
