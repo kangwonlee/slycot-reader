@@ -27,3 +27,12 @@ def test_unique_list_ordered():
     expected = list('abcd')
 
     assert expected == result, result
+
+
+def test_SetMdQuote():
+    s = mut.SetMdQuote(('a', 'b', 'c'))
+
+    s_str = str(s)
+    assert s_str.startswith('{'), s_str
+    assert s_str.endswith('}'), s_str
+    assert s_str.count('`') == 2 * len(s)
