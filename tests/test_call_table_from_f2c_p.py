@@ -135,3 +135,14 @@ def test_f2cp_reader_get_arg_type_name_split(f2cp_reader):
 
     assert 'name' in m_dict, m_dict
     assert 'jobz' == m_dict['name'], m_dict
+
+
+def test_get_lib_name_from_p_file_path_slycot(f2cp_reader):
+    input_path = '~/Slycot/slycot/src-f2c/abcd.P'
+
+    f2cp_reader.lib_name = None
+
+    # method under test
+    f2cp_reader.get_lib_name_from_p_file_path(input_path)
+
+    assert 'slycot' == f2cp_reader.lib_name
