@@ -87,3 +87,27 @@ def test_f2cp_reader_re_first_line_c_function_prototype(f2cp_reader):
     assert 'name' in m_dict, m_dict
     assert 'sb02sd_' == m_dict['name'], m_dict
     assert 'return_type' in m_dict, m_dict
+
+
+def test_f2cp_reader_get_latter_lines_pattern(f2cp_reader):
+
+    reader = f2cp_reader
+
+    # function under test
+    r = reader.get_latter_lines_pattern()
+
+    assert isinstance(r, re.Pattern), type(r)
+
+    input_string = '/*:ref: lsame_ 12 4 13 13 124 124 */'
+
+    m = r.search(input_string)
+
+    assert isinstance(m, re.Match), type(m)
+
+    m_dict = m.groupdict()
+
+    assert 'arg_types' in m_dict, m_dict
+    assert 'name' in m_dict, m_dict
+    assert 'lsame_' == m_dict['name'], m_dict
+    assert 'no_args' in m_dict, m_dict
+    assert 'return_type' in m_dict, m_dict
