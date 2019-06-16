@@ -1,8 +1,8 @@
 import os
+import re
 import sys
 
 import pytest
-
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 
@@ -70,9 +70,14 @@ def f2cp_reader():
 def test_f2cp_reader_re_first_line_c_function_prototype(f2cp_reader):
     reader = f2cp_reader
 
+    # function under test
+    r = reader.get_first_line_pattern()
+
+    assert isinstance(r, re.Pattern), type(r)
+
     input_lines = 'extern int sb02sd_(char *job, char *fact, char *trana, char *uplo, char *lyapun, integer *n, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *u, integer *ldu, doublereal *g, integer *ldg, doublereal *q, integer *ldq, doublereal *x, integer *ldx, doublereal *sepd, doublereal *rcond, doublereal *ferr, integer *iwork, doublereal *dwork, integer *ldwork, integer *info, ftnlen job_len, ftnlen fact_len, ftnlen trana_len, ftnlen uplo_len, ftnlen lyapun_len);'
 
-    result = reader.get_first_line_pattern().findall(input_lines)
+    result = r.findall(input_lines)
 
     assert isinstance(result, (list, tuple))
     assert 'sb02sd_' in result[0], result
