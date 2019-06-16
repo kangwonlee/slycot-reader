@@ -77,7 +77,13 @@ def test_f2cp_reader_re_first_line_c_function_prototype(f2cp_reader):
 
     input_lines = 'extern int sb02sd_(char *job, char *fact, char *trana, char *uplo, char *lyapun, integer *n, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *u, integer *ldu, doublereal *g, integer *ldg, doublereal *q, integer *ldq, doublereal *x, integer *ldx, doublereal *sepd, doublereal *rcond, doublereal *ferr, integer *iwork, doublereal *dwork, integer *ldwork, integer *info, ftnlen job_len, ftnlen fact_len, ftnlen trana_len, ftnlen uplo_len, ftnlen lyapun_len);'
 
-    result = r.findall(input_lines)
+    m = r.search(input_lines)
 
-    assert isinstance(result, (list, tuple))
-    assert 'sb02sd_' in result[0], result
+    assert isinstance(m, re.Match), type(m)
+
+    m_dict = m.groupdict()
+
+    assert 'arg_list' in m_dict, m_dict
+    assert 'name' in m_dict, m_dict
+    assert 'sb02sd_' == m_dict['name'], m_dict
+    assert 'return_type' in m_dict, m_dict
