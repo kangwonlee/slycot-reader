@@ -111,3 +111,27 @@ def test_f2cp_reader_get_latter_lines_pattern(f2cp_reader):
     assert 'lsame_' == m_dict['name'], m_dict
     assert 'no_args' in m_dict, m_dict
     assert 'return_type' in m_dict, m_dict
+
+
+def test_f2cp_reader_get_arg_type_name_split(f2cp_reader):
+
+    reader = f2cp_reader
+
+    # function under test
+    r = reader.get_arg_type_name_split()
+
+    assert isinstance(r, re.Pattern), type(r)
+
+    input_string = 'char *jobz'
+
+    m = r.search(input_string)
+
+    assert isinstance(m, re.Match), type(m)
+
+    m_dict = m.groupdict()
+
+    assert 'type' in m_dict, m_dict
+    assert 'char *' == m_dict['type'], m_dict
+
+    assert 'name' in m_dict, m_dict
+    assert 'jobz' == m_dict['name'], m_dict
